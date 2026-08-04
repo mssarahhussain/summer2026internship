@@ -5,12 +5,12 @@ import pandas as pd
 def load_csv():
     """Ask the user for a CSV file and load it into a Pandas DataFrame."""
 
-    # input() pauses the program and lets the user type the file location.
-    # strip() removes any accidental spaces before or after the path.
+    # input() --> user inputs csv file path
+    # strip() --> removes accidental spaces in path
     file_name = input("Enter the path to your CSV file: ").strip()
 
-    # Check that the file name ends in .csv.
-    # lower() also accepts uppercase names such as DATA.CSV.
+    # Make sure file name ends in csv
+    # lower() --> allows file name to be uppercase .CSV
     if not file_name.lower().endswith(".csv"):
         print("Error: Please enter a CSV file.")
         return None
@@ -19,7 +19,7 @@ def load_csv():
         # pd.read_csv() reads the CSV and stores it as a DataFrame.
         dataframe = pd.read_csv(file_name)
         return dataframe
-
+        # if the file is not found prints the error
     except FileNotFoundError:
         print("Error: File not found.")
         return None
@@ -33,30 +33,28 @@ def profile_data(dataframe):
     print("Rows:", dataframe.shape[0])
     print("Columns:", dataframe.shape[1])
 
-    # dataframe.columns contains the names of all columns.
+    # dataframe.columns --> prints list of all the names of the columns
     print("Column names:", list(dataframe.columns))
 
-    # duplicated() marks repeated rows as True, and sum() counts them.
+    # duplicated() and sum() --> mark the repeated rows and counts them
     print("Duplicate rows:", dataframe.duplicated().sum())
 
     print("\nCOLUMN SUMMARY")
 
-    # This creates a new table containing information about every column.
+    # New table created 
     column_summary = pd.DataFrame({
-        # dtypes shows the type of data in each column.
+        # dtypes --> type of data in each colummn 
         "Data type": dataframe.dtypes.astype(str),
 
-        # isna() finds missing values, and sum() counts them by column.
+        # isna() and sum() --> finds missing values and counts them 
         "Missing values": dataframe.isna().sum(),
 
-        # mean() finds the fraction of missing values. Multiplying by 100
-        # changes the fraction into a percentage.
+        # mean() --> finds how much the column are missing values and multiples by 100 to make it a percentage
         "Missing percentage": (dataframe.isna().mean() * 100).round(2)
     })
     print(column_summary)
 
-    # Keep only number columns because mean, median, standard deviation,
-    # and correlation cannot be calculated for text columns.
+    # Selects only the number columns to use for calculations 
     numeric_data = dataframe.select_dtypes(include=np.number)
 
     print("\nNUMERIC SUMMARY")
